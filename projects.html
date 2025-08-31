@@ -18,42 +18,9 @@
 
   <main>
     <section>
-      <h2>My Work</h2>
-
-      <div class="project">
-        <h3>YouTube Playlist Scraper</h3>
-        <p>Python script that extracts info from YouTube Playlists and saves on an Excel spreadsheet.</p>
-        <a href="https://github.com/lucasdasilvamaria/youtube-playlist-export">View on GitHub</a>
-      </div>
-
-        <div class="project">
-        <h3>CNA Reminder Bot</h3>
-        <p>Bot for CNA teachers to send automatic homework and Web Lesson reminders in the WhatsApp Desktop coordination group.</p>
-        <a href="https://github.com/lucasdasilvamaria/cna_reminder">View on GitHub</a>
-      </div>
-
-        <div class="project">
-        <h3>Carrefour Argentina Price Scraper</h3>
-        <p>Playwright scraper collecting product prices and exporting to Excel.</p>
-        <a href="https://github.com/lucasdasilvamaria/carrefour_argentina_price_scraper">View on GitHub</a>
-      </div>
-
-      <div class="project">
-        <h3>Is My PC a Potato</h3>
-        <p>Hardware diagnostic tool generating a “potato index” in JSON/Markdown.</p>
-        <a href="https://github.com/lucasdasilvamaria/is_my_pc_a_potato">View on GitHub</a>
-      </div>
-    </section>
-  </main>
-
-  <main>
-    <section>
-      <h2>My Studies</h2>
-
-      <div class="project">
-        <h3>Python Curso em Vídeo</h3>
-        <p>Study notes and exercises from the three Python modules (Curso em Vídeo).</p>
-        <a href="https://github.com/lucasdasilvamaria/python_curso_em_video">View on GitHub</a>
+      <h2>My GitHub</h2>
+      <div id="my-github">
+        <p>Loading repositories...</p>
       </div>
     </section>
   </main>
@@ -61,5 +28,51 @@
   <footer>
     <p>© 2025 Lucas Maria</p>
   </footer>
+
+  <script>
+    const username = 'lucasdasilvamaria';
+    const container = document.getElementById('my-github');
+
+    fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`)
+      .then(response => response.json())
+      .then(repos => {
+        if (!repos || repos.length === 0) {
+          container.innerHTML = '<p>No public repositories found.</p>';
+          return;
+        }
+
+        const list = document.createElement('ul');
+        list.style.listStyle = 'none';
+        list.style.padding = '0';
+
+        repos.forEach(repo => {
+          const item = document.createElement('li');
+          item.style.marginBottom = '15px';
+
+          const link = document.createElement('a');
+          link.href = repo.html_url;
+          link.target = '_blank';
+          link.style.fontWeight = 'bold';
+          link.style.fontSize = '16px';
+          link.textContent = repo.name;
+
+          const desc = document.createElement('p');
+          desc.textContent = repo.description || 'No description';
+          desc.style.margin = '5px 0 0 0';
+          desc.style.fontSize = '14px';
+          desc.style.color = '#555';
+
+          item.appendChild(link);
+          item.appendChild(desc);
+          list.appendChild(item);
+        });
+
+        container.innerHTML = '';
+        container.appendChild(list);
+      })
+      .catch(err => {
+        container.innerHTML = `<p>Error fetching repositories: ${err}</p>`;
+      });
+  </script>
 </body>
 </html>
