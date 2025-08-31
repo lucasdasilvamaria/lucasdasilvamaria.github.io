@@ -9,7 +9,6 @@
   <header>
     <h1>Projects</h1>
     <nav>
-      <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="projects.html">Projects</a>
       <a href="contact.html">Contact</a>
@@ -41,34 +40,33 @@
           return;
         }
 
-        const list = document.createElement('ul');
-        list.style.listStyle = 'none';
-        list.style.padding = '0';
+        container.innerHTML = ''; // limpa o loading
 
         repos.forEach(repo => {
-          const item = document.createElement('li');
-          item.style.marginBottom = '15px';
+          // cria div com a mesma classe dos projetos originais
+          const projectDiv = document.createElement('div');
+          projectDiv.className = 'project';
 
+          // título do projeto
+          const title = document.createElement('h3');
+          title.textContent = repo.name;
+
+          // descrição
+          const desc = document.createElement('p');
+          desc.textContent = repo.description || 'No description';
+
+          // link para o GitHub
           const link = document.createElement('a');
           link.href = repo.html_url;
           link.target = '_blank';
-          link.style.fontWeight = 'bold';
-          link.style.fontSize = '16px';
-          link.textContent = repo.name;
+          link.textContent = 'View on GitHub';
 
-          const desc = document.createElement('p');
-          desc.textContent = repo.description || 'No description';
-          desc.style.margin = '5px 0 0 0';
-          desc.style.fontSize = '14px';
-          desc.style.color = '#555';
+          projectDiv.appendChild(title);
+          projectDiv.appendChild(desc);
+          projectDiv.appendChild(link);
 
-          item.appendChild(link);
-          item.appendChild(desc);
-          list.appendChild(item);
+          container.appendChild(projectDiv);
         });
-
-        container.innerHTML = '';
-        container.appendChild(list);
       })
       .catch(err => {
         container.innerHTML = `<p>Error fetching repositories: ${err}</p>`;
